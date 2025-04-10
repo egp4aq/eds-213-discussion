@@ -32,8 +32,8 @@ We want to join on cst_count
 ```{r}
 cast_bottle <- cast %>% 
   left_join(bottle, join_by(Cst_Cnt, Sta_ID)) %>% 
-  mutate(Date = ymd(Date)) %>% 
-  mutate(Date = as.Date(Date))
+  clean_names() %>% 
+  mutate(date = mdy(date))
 ```
 
 
