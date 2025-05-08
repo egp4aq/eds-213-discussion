@@ -15,6 +15,8 @@ CREATE TABLE inventories(
     set_num int -- set number from sets
 );
 
+COPY inventories FROM '../lego data/inventories.csv' (header TRUE, nullstr "NA");
+
 -- create sets table
 CREATE TABLE sets(
     id int NOT NULL,
@@ -25,6 +27,8 @@ CREATE TABLE sets(
     num_parts int -- number of parts in set
 );
 
+COPY sets FROM '../lego data/sets.csv' (header TRUE, nullstr "NA");
+
 -- create parts table
 CREATE TABLE parts(
     part_num int NOT NULL, -- unique ID for the part
@@ -32,9 +36,13 @@ CREATE TABLE parts(
     part_cat_id int -- part category ID from part_categories
 );
 
+COPY parts FROM '../lego data/parts.csv' (header TRUE, nullstr "NA");
+
 -- create themes table
 CREATE TABLE themes(
     id int NOT NULL, -- theme unique ID
     name varchar, -- name of theme
     parent_id int -- unique ID for larger theme
 );
+
+COPY themes FROM '../lego data/themes.csv' (header TRUE, nullstr "NA");
