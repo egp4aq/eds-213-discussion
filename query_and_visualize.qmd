@@ -1,0 +1,29 @@
+---
+title: "Querying and Visualizing"
+format: html
+author: Liz Peterson
+date: 5-8-2025
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(tidyverse)
+library(DBI)         # low-level database interface, comparable to what we saw in Python
+library(dbplyr)
+library(duckdb)     # Specific to duckDB
+library(here)
+```
+
+```{r}
+# Create connection
+conn <- DBI::dbConnect(duckdb::duckdb(), dbdir = here("lego.db"))
+
+# List out tables in database
+DBI::dbListTables(conn)
+```
+
+```{r}
+sets <- dbGetQuery(conn, "SELECT * FROM sets")
+```
+
