@@ -1,20 +1,24 @@
 ---
-title: "Querying and Visualizing"
+title: "Querying and Visualizing from the lego database"
 format: html
-author: Liz Peterson
-date: 5-8-2025
+author: "Liz Peterson"
+date: "5-15-2025"
 editor_options: 
   chunk_output_type: console
 ---
 
+### Read in libraries
 ```{r}
 library(tidyverse)
-library(DBI)         # low-level database interface, comparable to what we saw in Python
+library(DBI)
 library(dbplyr)
-library(duckdb)     # Specific to duckDB
+library(duckdb)
 library(here)
+library(dplyr)
+library(ggplot2)
 ```
 
+### Create 
 ```{r}
 # Create connection
 conn <- DBI::dbConnect(duckdb::duckdb(), dbdir = here("lego.db"))
@@ -23,7 +27,51 @@ conn <- DBI::dbConnect(duckdb::duckdb(), dbdir = here("lego.db"))
 DBI::dbListTables(conn)
 ```
 
+I set out with my query and visualization to look at how themes have changed over time. Specifically, I wanted to see if sets with what I would call sensitive themes have declined over time.
+
 ```{r}
-sets <- dbGetQuery(conn, "SELECT * FROM sets")
+query <- dbGetQuery(conn, "SELECT sets.year, themes.name AS theme_name,
+COUNT(sets.set_num) AS num_sets FROM sets 
+JOIN themes ON sets.theme_id = themes.id
+GROUP BY sets.year, themes.name
+ORDER BY sets.year ASC, num_sets DESC;")
 ```
+
+```{r}
+# Look at how the police theme has changed over time 
+police_trend <- query %>%
+  filter(theme_name == "Police") %>%
+  arrange(year)
+```
+
+```{r}
+# --> looks like this is just because there's more legos made later maybe
+ggplot(police_trend, aes(x = year, y = num_sets)) +
+  geom_line(color = "blue", size = 1.2) +
+  labs(
+    title = "Number of Police Theme Sets Released Over Time",
+    x = "Year",
+    y = "Number of Sets"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# okay new thinking: pink is my favorite color! let me see which of these themes have the most pink
+pink <- dbGetQuery(conn, "SELECT 
+  themes.name AS theme_name,
+  SUM(inventory_parts.quantity) AS pink_part_count
+FROM inventory_parts
+JOIN inventories ON inventory_parts.inventory_id = inventories.id
+JOIN sets ON inventories.set_num = sets.set_num
+JOIN themes ON sets.theme_id = themes.id
+JOIN colors ON inventory_parts.color_id = colors.id
+WHERE 
+  LOWER(colors.name) IN ('pink','dark pink','chrome pink','bright pink','light pink','glitter trans-dark pink')
+GROUP BY 
+  themes.name
+ORDER BY 
+  pink_part_count DESC;")
+```
+
 
