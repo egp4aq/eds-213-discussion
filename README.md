@@ -1,11 +1,11 @@
 ## Repository for EDS 213: Databases and Data Management Discussion Section
 
 ### Description
-This repository holds the code for our quarter-long database project in the EDS 213 discussion section. 
+This repository holds the code for our quarter-long database project in the EDS 213 discussion section. Specifically, it hosts the code to create, query into, and visualize results from a lego database, built off of a kaggle dataset. The visualization answers the question of which themes in the lego universe has the most pink parts.
 
 ### Repository Structure
 ```{bash}
-simpsons_database
+eds-213-discussion
 |
 ├── images/
 |     └── downloads_schema.png   # schema diagram for README.md
