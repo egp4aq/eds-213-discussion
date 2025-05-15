@@ -55,3 +55,16 @@ CREATE TABLE themes(
 INSERT INTO themes
 SELECT id, name, parent_id
 FROM read_csv_auto('/Users/elizabethpeterson/MEDS/eds-213-discussion/data/themes.csv', HEADER=TRUE, SAMPLE_SIZE=-1, NULLSTR = 'NA');
+
+-- create inventory parts table
+CREATE TABLE inventory_parts(
+    inventory_id int NOT NULL, -- theme inventory ID
+    part_num varchar, 
+    color_id varchar,
+    quantity int,
+    is_spare boolean
+);
+
+INSERT INTO inventory_parts
+SELECT inventory_id, part_num, color_id, quantity, is_spare
+FROM read_csv_auto('/Users/elizabethpeterson/MEDS/eds-213-discussion/lego data/inventory_parts.csv', HEADER=TRUE, SAMPLE_SIZE=-1, NULLSTR = 'NA');
