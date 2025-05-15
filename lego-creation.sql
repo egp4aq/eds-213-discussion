@@ -6,43 +6,52 @@ CREATE TABLE colors(
     is_trans boolean -- t/f if color is transparent
 );
 
-COPY colors FROM '../lego data/colors.csv' (header TRUE, nullstr "NA");
+INSERT INTO colors
+SELECT id, name, rgb, is_trans
+FROM read_csv_auto('/Users/elizabethpeterson/MEDS/eds-213-discussion/data/colors.csv', HEADER=TRUE, SAMPLE_SIZE=-1, NULLSTR = 'NA');
 
 -- create inventories table
 CREATE TABLE inventories(
     id int NOT NULL, -- unique id for inventory entry
     version int, -- version number
-    set_num int -- set number from sets
+    set_num varchar -- set number from sets
 );
 
-COPY inventories FROM '../lego data/inventories.csv' (header TRUE, nullstr "NA");
+INSERT INTO inventories
+SELECT id, version, set_num
+FROM read_csv_auto('/Users/elizabethpeterson/MEDS/eds-213-discussion/data/inventories.csv', HEADER=TRUE, SAMPLE_SIZE=-1, NULLSTR = 'NA');
 
 -- create sets table
 CREATE TABLE sets(
-    id int NOT NULL,
     name varchar, -- name of set
     year int, -- year set was published
-    set_num int, -- set number from sets
+    set_num varchar, -- set number from sets
     theme_id int, -- unique ID for theme used for set
     num_parts int -- number of parts in set
 );
 
-COPY sets FROM '../lego data/sets.csv' (header TRUE, nullstr "NA");
+INSERT INTO sets
+SELECT name, year, set_num, theme_id, num_parts
+FROM read_csv_auto('/Users/elizabethpeterson/MEDS/eds-213-discussion/data/sets.csv', HEADER=TRUE, SAMPLE_SIZE=-1, NULLSTR = 'NA');
 
 -- create parts table
 CREATE TABLE parts(
-    part_num int NOT NULL, -- unique ID for the part
+    part_num varchar NOT NULL, -- unique ID for the part
     name varchar, -- name of the part
     part_cat_id int -- part category ID from part_categories
 );
 
-COPY parts FROM '../lego data/parts.csv' (header TRUE, nullstr "NA");
+INSERT INTO parts
+SELECT part_num, name, part_cat_id
+FROM read_csv_auto('/Users/elizabethpeterson/MEDS/eds-213-discussion/data/parts.csv', HEADER=TRUE, SAMPLE_SIZE=-1, NULLSTR = 'NA');
 
 -- create themes table
 CREATE TABLE themes(
     id int NOT NULL, -- theme unique ID
     name varchar, -- name of theme
-    parent_id int -- unique ID for larger theme
+    parent_id varchar -- unique ID for larger theme
 );
 
-COPY themes FROM '../lego data/themes.csv' (header TRUE, nullstr "NA");
+INSERT INTO themes
+SELECT id, name, parent_id
+FROM read_csv_auto('/Users/elizabethpeterson/MEDS/eds-213-discussion/data/themes.csv', HEADER=TRUE, SAMPLE_SIZE=-1, NULLSTR = 'NA');
