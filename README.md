@@ -44,3 +44,4 @@ This dataset contains the LEGO Parts/Sets/Colors and Inventories of every offici
 Liz Peterson
 
 ### References & Acknowledgements
+This assignment was created for the class EDS 213: Databases and Data Management at the Bren School of Environmental Science & Management by TA Annie Adams and instructors Greg Janee and Julien Brun. 
