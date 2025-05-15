@@ -132,3 +132,9 @@ ggplot(top_pink_no_basic, aes(x = "", y = pink_part_count, fill = theme_name)) +
 ```
 
 Okay, now it is a bit better!
+
+Lastly, I need to run my dependencies
+```{r}
+utils::sessionInfo()
+```
+
