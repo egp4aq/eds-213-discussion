@@ -6,7 +6,7 @@ This repository holds the code for our quarter-long database project in the EDS 
 ### Repository Structure
 
 ### Database Schema
-
+![](images/downloads_schema.png)
 
 ### Data Access
 The data in this repository is sourced from a kaggle dataset: https://www.kaggle.com/datasets/rtatman/lego-database?resource=download&select=sets.csv
