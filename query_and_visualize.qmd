@@ -69,10 +69,8 @@ JOIN themes ON sets.theme_id = themes.id
 JOIN colors ON inventory_parts.color_id = colors.id
 WHERE 
   LOWER(colors.name) IN ('pink','dark pink','chrome pink','bright pink','light pink','glitter trans-dark pink')
-GROUP BY 
-  themes.name
-ORDER BY 
-  pink_part_count DESC;")
+GROUP BY themes.name
+ORDER BY pink_part_count DESC;")
 ```
 
 Okay, now let's visualize it: 
@@ -80,13 +78,29 @@ Okay, now let's visualize it:
 ```{r}
 top_pink <- head(pink, 10)
 ggplot(top_pink, aes(x = "", y = pink_part_count, fill = theme_name)) +
-  geom_bar(stat = "identity", width = 1) +
+  geom_bar(stat = "identity", width = 1, color = 'black') +
   coord_polar("y") +
   labs(title = "What themes have the most pink??") +
   theme_void() +
   scale_fill_brewer(palette = "Pastel1") +
-  theme(plot.background = element_rect(fill = 'pink'))
-  
-
+  theme(plot.background = element_rect(fill = 'pink')) +
+  labs(fill = "Theme Name")
 ```
 
+I see when I visualize it that a large chunk of the pie chart is the "Basic Set" theme. For my purposes, I only want to look at the themes that are unique. So, I am going to take that out and look again at my results. 
+
+```{r}
+top_pink_no_basic <- pink %>% 
+  filter(theme_name != "Basic Set") %>% 
+  head(10)
+ggplot(top_pink_no_basic, aes(x = "", y = pink_part_count, fill = theme_name)) +
+  geom_bar(stat = "identity", width = 1, color = 'black') +
+  coord_polar("y") +
+  labs(title = "What themes have the most pink??") +
+  theme_void() +
+  scale_fill_brewer(palette = "Pastel1") +
+  theme(plot.background = element_rect(fill = 'pink')) +
+  labs(fill = "Theme Name")
+```
+
+Okay, now it is a bit better!
