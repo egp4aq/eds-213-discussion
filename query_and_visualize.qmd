@@ -16,6 +16,8 @@ library(duckdb)
 library(here)
 library(dplyr)
 library(ggplot2)
+library(showtext)
+library(sysfonts)
 ```
 
 ### Create 
@@ -89,17 +91,43 @@ ggplot(top_pink, aes(x = "", y = pink_part_count, fill = theme_name)) +
 
 I see when I visualize it that a large chunk of the pie chart is the "Basic Set" theme. For my purposes, I only want to look at the themes that are unique. So, I am going to take that out and look again at my results. 
 
+Also, I want to add my font:
+
+```{r}
+font_add("legofont", "~/Downloads/Fonts/lego/LEGO.ttf")  # use full path
+showtext_auto()  # enable showtext
+```
+
+
 ```{r}
 top_pink_no_basic <- pink %>% 
   filter(theme_name != "Basic Set") %>% 
   head(10)
+
+
+# Compute percentage of whole for the pie chart labels
+top_pink_no_basic <- top_pink_no_basic %>%
+  mutate(
+    percent = pink_part_count / sum(pink_part_count) * 100,
+    label = paste0(round(percent), "%")
+  )
+
+# Create plot
 ggplot(top_pink_no_basic, aes(x = "", y = pink_part_count, fill = theme_name)) +
   geom_bar(stat = "identity", width = 1, color = 'black') +
   coord_polar("y") +
-  labs(title = "What themes have the most pink??") +
-  theme_void() +
+  labs(title = "Which lego themes have the most pink parts?") +
+  geom_text(aes(label = label),
+            position = position_stack(vjust = 0.5),
+            family = "legofont",
+            size=8) +
+  theme_void(base_family = "legofont") +
+ # scale_fill_manual(values = c("#FF00FF","#FF1DCE","#CA1F7B","#FF0090","#F653A6","#DA70D6","#FE4EDA","#FF33CC","#FF66CC","#FF6FFF")) +
   scale_fill_brewer(palette = "Pastel1") +
-  theme(plot.background = element_rect(fill = 'pink')) +
+  theme(plot.background = element_rect(fill = 'pink'),
+        plot.title = element_text(hjust = 0.5, size = 30),
+        legend.text = element_text(size = 15),
+        legend.title = element_text(size = 18)) +
   labs(fill = "Theme Name")
 ```
 
